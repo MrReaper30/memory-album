@@ -1,15 +1,14 @@
 [
   {
-    "category": "Beach Trips & Sunsets",
+    "category": "9th May :- Miramar Beach",
     "photos": [
-      { "title": "Evening Walk", "src": "images/photo1.jpg" },
-      { "title": "Shoreline", "src": "images/photo2.jpg" }
+      { "title": "Miramar Sunset", "src": "images/miramar_beach/photo1.jpg" }
     ]
   },
   {
-    "category": "Special Dates",
+    "category": "Bus Stand Moments",
     "photos": [
-      { "title": "Dinner Night", "src": "images/photo3.jpg" }
+      { "title": "Waiting Together", "src": "images/bus_stand/photo1.jpg" }
     ]
   }
 ]
