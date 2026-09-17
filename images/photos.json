@@ -2,13 +2,13 @@
   {
     "category": "9th May :- Miramar Beach",
     "photos": [
-      { "title": "Miramar Sunset", "src": "images/miramar_beach/photo1.jpg" }
+      { "title": "Miramar Beach", "src": "images/miramar_beach/IMG20260509114312.jpg" },
+      { "title": "Beach Moment", "src": "images/miramar_beach/IMG20260509115616.jpg" },
+      { "title": "Snapchat Memory", "src": "images/miramar_beach/Snapchat-1236124628.jpg" }
     ]
   },
   {
     "category": "Bus Stand Moments",
-    "photos": [
-      { "title": "Waiting Together", "src": "images/bus_stand/photo1.jpg" }
-    ]
+    "photos": []
   }
 ]
