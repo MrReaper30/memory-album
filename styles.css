@@ -129,6 +129,30 @@ body {
 .category-row { padding: 15px 20px; }
 .row-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
 
+/* Custom Message Banner Card */
+.message-card {
+  margin: 25px 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #1f1f1f 0%, #111111 100%);
+  border-left: 4px solid #e50914;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.message-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e50914;
+  margin-bottom: 12px;
+}
+
+.message-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ddd;
+  font-style: italic;
+}
+
 .thumbnails {
   display: flex;
   gap: 12px;
@@ -145,6 +169,7 @@ body {
   cursor: pointer;
   overflow: hidden;
   background-color: #222;
+  position: relative;
 }
 
 .card-img {
@@ -154,6 +179,20 @@ body {
   display: block;
 }
 
+.video-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(229, 9, 20, 0.85);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+}
+
+/* Modal and Smooth Cross-Fade Transition */
 .modal {
   display: none;
   position: fixed;
@@ -169,6 +208,14 @@ body {
   max-width: 90%;
   max-height: 80vh;
   border-radius: 8px;
+}
+
+.fade-element {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-hidden {
+  opacity: 0;
 }
 
 .close-btn {

@@ -5,7 +5,6 @@ let heroIndex = 0;
 
 async function loadAlbum() {
   try {
-    // Append timestamp to prevent Chrome from loading cached photos.json
     const cacheBuster = new Date().getTime();
     const res = await fetch(`images/photos.json?cb=${cacheBuster}`);
     const data = await res.json();
@@ -13,7 +12,20 @@ async function loadAlbum() {
     catalog.innerHTML = '';
     playlist = [];
 
-    data.forEach(section => {
+    data.forEach((section, idx) => {
+      // Inject Special Message Card between Miramar Beach and Bus Stand
+      if (idx === 1) {
+        const msgCard = document.createElement('div');
+        msgCard.className = 'message-card';
+        msgCard.innerHTML = `
+          <div class="message-title">Thanks for not giving up on me</div>
+          <div class="message-text">
+            "Thank you for not giving up on me through all my mood swings and my illogical arguments in which I manipulate you without you realising to say yes to me 😗 so do know that I won't give up on you no matter what anyone says or no matter who comes in our way so thank you for always being with me and always having my back when I need you and for that I will always be grateful for you and I love you and continue loving you no matter what anyone says. So my Shanuli I love you and I'll always love you as innocently as the day u asked me if I would becoming friends with you when u sat behind me in the 11th std Xavier's classroom 😉"
+          </div>
+        `;
+        catalog.appendChild(msgCard);
+      }
+
       if (!section.photos || section.photos.length === 0) return;
 
       const row = document.createElement('div');
@@ -32,20 +44,17 @@ async function loadAlbum() {
         const card = document.createElement('div');
         card.className = 'card';
         
+        const imgEl = document.createElement('img');
+        imgEl.src = item.poster || item.src;
+        imgEl.loading = 'lazy';
+        imgEl.className = 'card-img';
+        card.appendChild(imgEl);
+
         if (item.type === 'video') {
-          card.style.backgroundColor = '#222';
-          card.innerText = '▶ Video';
-          card.style.display = 'flex';
-          card.style.alignItems = 'center';
-          card.style.justifyContent = 'center';
-          card.style.fontWeight = 'bold';
-        } else {
-          const imgEl = document.createElement('img');
-          imgEl.src = item.src;
-          imgEl.loading = 'lazy';
-          imgEl.alt = item.title || 'Memory';
-          imgEl.className = 'card-img';
-          card.appendChild(imgEl);
+          const badge = document.createElement('div');
+          badge.className = 'video-badge';
+          badge.innerText = '▶ VIDEO';
+          card.appendChild(badge);
         }
 
         card.onclick = () => showMedia(item);
@@ -114,17 +123,26 @@ function showMedia(item) {
 
   modal.style.display = 'flex';
 
-  if (item.type === 'video' || item.src.endsWith('.mp4')) {
-    img.style.display = 'none';
-    video.style.display = 'block';
-    video.src = item.src;
-    video.play();
-  } else {
-    video.style.display = 'none';
-    video.pause();
-    img.style.display = 'block';
-    img.src = item.src;
-  }
+  // Apply smooth fade-in effect on media load
+  const activeMedia = (item.type === 'video' || item.src.endsWith('.mp4')) ? video : img;
+  
+  img.classList.add('fade-hidden');
+  video.classList.add('fade-hidden');
+
+  setTimeout(() => {
+    if (item.type === 'video' || item.src.endsWith('.mp4')) {
+      img.style.display = 'none';
+      video.style.display = 'block';
+      video.src = item.src;
+      video.play();
+    } else {
+      video.style.display = 'none';
+      video.pause();
+      img.style.display = 'block';
+      img.src = item.src;
+    }
+    activeMedia.classList.remove('fade-hidden');
+  }, 250);
 }
 
 function closeModal() {
@@ -156,7 +174,7 @@ function playNextSlide() {
   if (item.type === 'video' || item.src.endsWith('.mp4')) {
     video.onended = () => advanceSlide();
   } else {
-    slideshowTimer = setTimeout(() => advanceSlide(), 3000);
+    slideshowTimer = setTimeout(() => advanceSlide(), 3500);
   }
 }
 
