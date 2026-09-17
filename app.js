@@ -5,7 +5,7 @@ let heroIndex = 0;
 
 async function loadAlbum() {
   try {
-    const res = await fetch('images/photos.json?v=4');
+    const res = await fetch('images/photos.json?v=5');
     const data = await res.json();
     const catalog = document.getElementById('catalog');
     catalog.innerHTML = '';
@@ -56,30 +56,38 @@ async function loadAlbum() {
   }
 }
 
-// Netflix Hero Image Switcher
+// Netflix Hero Image Switcher with Zoom Reset
 function startHeroSlideshow() {
   const imagesOnly = playlist.filter(item => item.type === 'image');
   if (imagesOnly.length === 0) return;
 
-  const hero = document.getElementById('hero-banner');
-  hero.style.backgroundImage = `url('${imagesOnly[0].src}')`;
+  const heroBg = document.getElementById('hero-bg');
+  
+  function updateBg() {
+    heroBg.style.backgroundImage = `url('${imagesOnly[heroIndex].src}')`;
+    // Restart animation on image change
+    heroBg.style.animation = 'none';
+    heroBg.offsetHeight; /* trigger reflow */
+    heroBg.style.animation = 'heroZoom 6s ease-in-out infinite alternate';
+  }
+
+  updateBg();
 
   setInterval(() => {
     heroIndex = (heroIndex + 1) % imagesOnly.length;
-    hero.style.backgroundImage = `url('${imagesOnly[heroIndex].src}')`;
-  }, 4000); // Changes background image every 4s
+    updateBg();
+  }, 5000); // Changes image every 5 seconds
 }
 
-// Synthetic Flute Sound Effect via Web Audio API
 function playIntroSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = 'sine'; // Flute-like clean wave
-    osc.frequency.setValueAtTime(440, ctx.currentTime); // A4
-    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 1.2); // Ramp up to A5
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 1.2);
 
     gain.gain.setValueAtTime(0.01, ctx.currentTime);
     gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.3);
