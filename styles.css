@@ -9,10 +9,8 @@ body {
 /* Intro Screen */
 .intro-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   background-color: #000;
   z-index: 1000;
   display: flex;
@@ -26,8 +24,15 @@ body {
 .logo-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   animation: zoomIntro 2.5s ease-in-out forwards;
+}
+
+.custom-logo {
+  max-width: 240px;
+  max-height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.8));
 }
 
 .sp-logo {
@@ -74,7 +79,6 @@ body {
   background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
 }
 
-/* Hero Outer Container */
 .hero {
   height: 50vh;
   position: relative;
@@ -84,7 +88,6 @@ body {
   overflow: hidden;
 }
 
-/* Hero Background Layer for Smooth Zoom */
 .hero-bg {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -96,12 +99,8 @@ body {
 }
 
 @keyframes heroZoom {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.15);
-  }
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
 }
 
 .hero::after {
@@ -128,15 +127,8 @@ body {
   cursor: pointer;
 }
 
-.category-row {
-  padding: 15px 20px;
-}
-
-.row-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+.category-row { padding: 15px 20px; }
+.row-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
 
 .thumbnails {
   display: flex;
@@ -144,7 +136,6 @@ body {
   overflow-x: auto;
   padding-bottom: 10px;
 }
-
 .thumbnails::-webkit-scrollbar { display: none; }
 
 .card {
