@@ -4,12 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shanuli and Paplet's Album</title>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
+
+  <!-- Netflix Style S & P Intro Screen -->
+  <div id="intro-screen" class="intro-container" onclick="playIntro()">
+    <div class="logo-wrapper">
+      <span class="sp-logo">S & P</span>
+      <span class="flute-icon">🪈</span>
+    </div>
+    <p class="tap-hint">Tap anywhere to enter</p>
+  </div>
+
   <header class="navbar">Shanuli and Paplet's Album</header>
 
-  <div class="hero">
+  <div class="hero" id="hero-banner">
     <div class="hero-content">
       <h1>Our Favorite Moments</h1>
       <button class="play-btn" onclick="startSlideshow()">▶ Play Slideshow</button>
@@ -18,13 +28,13 @@
 
   <main id="catalog"></main>
 
-  <!-- Unified Modal for Photos & Videos -->
+  <!-- Modal Viewer for Photos & Videos -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close-btn">&times;</span>
     <img id="modal-img" class="modal-content" src="" style="display:none;">
     <video id="modal-video" class="modal-content" controls autoplay style="display:none;"></video>
   </div>
 
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

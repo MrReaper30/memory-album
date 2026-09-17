@@ -3,10 +3,67 @@ body {
   background-color: #141414;
   color: #fff;
   font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
+/* Intro Screen */
+.intro-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: zoomIntro 2.5s ease-in-out forwards;
+}
+
+.sp-logo {
+  font-size: 64px;
+  font-weight: 900;
+  color: #e50914;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.8);
+  letter-spacing: 4px;
+}
+
+.flute-icon {
+  font-size: 48px;
+  filter: drop-shadow(0 0 10px #e50914);
+}
+
+.tap-hint {
+  margin-top: 30px;
+  color: #888;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+@keyframes zoomIntro {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Main UI */
 .navbar {
-  padding: 20px 20px;
+  padding: 20px;
   font-size: 20px;
   font-weight: bold;
   color: #e50914;
@@ -18,11 +75,26 @@ body {
 }
 
 .hero {
-  height: 45vh;
-  background: linear-gradient(to top, #141414, transparent), url('images/miramar_beach/IMG20260509114312.jpg') center/cover;
+  height: 50vh;
+  background-position: center;
+  background-size: cover;
   display: flex;
   align-items: flex-end;
   padding: 20px;
+  transition: background-image 1s ease-in-out;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, #141414 10%, transparent 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .play-btn {
@@ -53,9 +125,7 @@ body {
   padding-bottom: 10px;
 }
 
-.thumbnails::-webkit-scrollbar {
-  display: none;
-}
+.thumbnails::-webkit-scrollbar { display: none; }
 
 .card {
   min-width: 160px;
@@ -67,15 +137,13 @@ body {
   cursor: pointer;
 }
 
-/* Modal UI */
+/* Modal */
 .modal {
   display: none;
   position: fixed;
   z-index: 100;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.95);
   justify-content: center;
   align-items: center;
@@ -89,8 +157,7 @@ body {
 
 .close-btn {
   position: absolute;
-  top: 20px;
-  right: 30px;
+  top: 20px; right: 30px;
   color: #fff;
   font-size: 40px;
   font-weight: bold;
