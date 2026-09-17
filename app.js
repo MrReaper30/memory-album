@@ -56,16 +56,15 @@ async function loadAlbum() {
         const card = document.createElement('div');
         card.className = 'card';
         
-        if (item.type === 'video') {
-          // If video preview poster image fails to load, fallback to dark video card
-          const imgEl = document.createElement('img');
-          imgEl.src = item.poster || item.src;
-          imgEl.loading = 'lazy';
-          imgEl.className = 'card-img';
-          imgEl.onerror = () => {
-            imgEl.style.display = 'none';
-          };
-          card.appendChild(imgEl);
+        if (item.type === 'video' || item.src.endsWith('.mp4')) {
+          // Native Video Preview Element (Muted & Preloaded to 1s)
+          const vidEl = document.createElement('video');
+          vidEl.src = `${item.src}#t=0.5`; // Seek to 0.5s for thumbnail frame
+          vidEl.className = 'card-img';
+          vidEl.muted = true;
+          vidEl.playsInline = true;
+          vidEl.preload = 'metadata';
+          card.appendChild(vidEl);
 
           const badge = document.createElement('div');
           badge.className = 'video-badge';
@@ -129,7 +128,6 @@ function playIntroSound() {
   audio.play().catch(e => console.log('Audio playback info:', e));
 }
 
-// Instant Intro Screen Dismissal
 function playIntro() {
   playIntroSound();
   const intro = document.getElementById('intro-screen');
