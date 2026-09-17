@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shanuli and Paplet's Album</title>
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="preload" href="logo/logo.png" as="image">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -35,10 +36,10 @@
   <!-- Modal Viewer for Photos & Videos -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close-btn">&times;</span>
-    <img id="modal-img" class="modal-content" src="" style="display:none;">
+    <img id="modal-img" class="modal-content" src="" style="display:none;" loading="eager">
     <video id="modal-video" class="modal-content" controls autoplay style="display:none;"></video>
   </div>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

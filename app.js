@@ -5,14 +5,14 @@ let heroIndex = 0;
 
 async function loadAlbum() {
   try {
-    const res = await fetch('images/photos.json?v=5');
+    const res = await fetch('images/photos.json?v=7');
     const data = await res.json();
     const catalog = document.getElementById('catalog');
     catalog.innerHTML = '';
     playlist = [];
 
     data.forEach(section => {
-      if (section.photos.length === 0) return;
+      if (!section.photos || section.photos.length === 0) return;
 
       const row = document.createElement('div');
       row.className = 'category-row';
@@ -38,7 +38,13 @@ async function loadAlbum() {
           card.style.justifyContent = 'center';
           card.style.fontWeight = 'bold';
         } else {
-          card.style.backgroundImage = `url('${item.src}')`;
+          // Fast img element with native lazy loading instead of CSS background
+          const imgEl = document.createElement('img');
+          imgEl.src = item.src;
+          imgEl.loading = 'lazy';
+          imgEl.alt = item.title || 'Memory';
+          imgEl.className = 'card-img';
+          card.appendChild(imgEl);
         }
 
         card.onclick = () => showMedia(item);
@@ -56,7 +62,13 @@ async function loadAlbum() {
   }
 }
 
-// Netflix Hero Image Switcher with Zoom Reset
+// Preload next image in background for zero lag during slideshow
+function preloadImage(url) {
+  if (!url || url.endsWith('.mp4')) return;
+  const img = new Image();
+  img.src = url;
+}
+
 function startHeroSlideshow() {
   const imagesOnly = playlist.filter(item => item.type === 'image');
   if (imagesOnly.length === 0) return;
@@ -65,10 +77,13 @@ function startHeroSlideshow() {
   
   function updateBg() {
     heroBg.style.backgroundImage = `url('${imagesOnly[heroIndex].src}')`;
-    // Restart animation on image change
     heroBg.style.animation = 'none';
-    heroBg.offsetHeight; /* trigger reflow */
+    heroBg.offsetHeight;
     heroBg.style.animation = 'heroZoom 6s ease-in-out infinite alternate';
+    
+    // Preload next background
+    const nextIdx = (heroIndex + 1) % imagesOnly.length;
+    preloadImage(imagesOnly[nextIdx].src);
   }
 
   updateBg();
@@ -76,31 +91,12 @@ function startHeroSlideshow() {
   setInterval(() => {
     heroIndex = (heroIndex + 1) % imagesOnly.length;
     updateBg();
-  }, 5000); // Changes image every 5 seconds
+  }, 5000);
 }
 
 function playIntroSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 1.2);
-
-    gain.gain.setValueAtTime(0.01, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.3);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + 2.0);
-  } catch (e) {
-    console.log('Audio error:', e);
-  }
+  const audio = new Audio('audio/intro.mp3');
+  audio.play().catch(e => console.log('Audio playback info:', e));
 }
 
 function playIntro() {
@@ -152,6 +148,10 @@ function playNextSlide() {
 
   const item = playlist[currentIndex];
   showMedia(item);
+
+  // Preload upcoming slide
+  const nextItem = playlist[(currentIndex + 1) % playlist.length];
+  if (nextItem) preloadImage(nextItem.src);
 
   const video = document.getElementById('modal-video');
   
