@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  background-color: #141414;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  padding: 20px 40px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #e50914;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+.hero {
+  height: 55vh;
+  background: linear-gradient(to top, #141414, transparent), url('images/photo1.jpg') center/cover;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+}
+
+.play-btn {
+  background: #fff;
+  color: #000;
+  padding: 10px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.category-row {
+  padding: 10px 40px;
+}
+
+.row-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  min-width: 200px;
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}

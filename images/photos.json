@@ -1,0 +1,15 @@
+[
+  {
+    "category": "Beach Trips & Sunsets",
+    "photos": [
+      { "title": "Evening Walk", "src": "images/photo1.jpg" },
+      { "title": "Shoreline", "src": "images/photo2.jpg" }
+    ]
+  },
+  {
+    "category": "Special Dates",
+    "photos": [
+      { "title": "Dinner Night", "src": "images/photo3.jpg" }
+    ]
+  }
+]
