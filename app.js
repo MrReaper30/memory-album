@@ -3,7 +3,6 @@ let currentIndex = 0;
 let slideshowTimer = null;
 let heroIndex = 0;
 
-// Navbar Scroll Disappear Listener
 window.addEventListener('scroll', () => {
   const navbar = document.getElementById('top-navbar');
   if (window.scrollY > 80) {
@@ -13,7 +12,7 @@ window.addEventListener('scroll', () => {
     navbar.style.opacity = '1';
     navbar.style.pointerEvents = 'auto';
   }
-});
+}, { passive: true });
 
 async function loadAlbum() {
   try {
@@ -25,7 +24,6 @@ async function loadAlbum() {
     playlist = [];
 
     data.forEach((section, idx) => {
-      // Message Card Injection
       if (idx === 1) {
         const msgCard = document.createElement('div');
         msgCard.className = 'message-card';
@@ -62,7 +60,7 @@ async function loadAlbum() {
           vidEl.className = 'card-img';
           vidEl.muted = true;
           vidEl.playsInline = true;
-          vidEl.preload = 'metadata';
+          vidEl.preload = 'none'; // Prevents background data hogging
           card.appendChild(vidEl);
 
           const badge = document.createElement('div');
@@ -73,6 +71,7 @@ async function loadAlbum() {
           const imgEl = document.createElement('img');
           imgEl.src = item.src;
           imgEl.loading = 'lazy';
+          imgEl.decoding = 'async';
           imgEl.className = 'card-img';
           card.appendChild(imgEl);
         }
@@ -92,12 +91,6 @@ async function loadAlbum() {
   }
 }
 
-function preloadImage(url) {
-  if (!url || url.endsWith('.mp4')) return;
-  const img = new Image();
-  img.src = url;
-}
-
 function startHeroSlideshow() {
   const imagesOnly = playlist.filter(item => item.type === 'image');
   if (imagesOnly.length === 0) return;
@@ -109,9 +102,6 @@ function startHeroSlideshow() {
     heroBg.style.animation = 'none';
     heroBg.offsetHeight;
     heroBg.style.animation = 'heroZoom 6s ease-in-out infinite alternate';
-    
-    const nextIdx = (heroIndex + 1) % imagesOnly.length;
-    preloadImage(imagesOnly[nextIdx].src);
   }
 
   updateBg();
@@ -122,25 +112,19 @@ function startHeroSlideshow() {
   }, 5000);
 }
 
-// Non-blocking, instant intro transition
 function playIntro() {
   const intro = document.getElementById('intro-screen');
-  
-  // 1. Hide screen instantly without waiting for audio thread
   intro.style.opacity = '0';
   intro.style.pointerEvents = 'none';
   setTimeout(() => {
     intro.style.display = 'none';
   }, 200);
 
-  // 2. Play intro audio asynchronously in background
   setTimeout(() => {
     try {
       const audio = new Audio('audio/intro.mp3');
       audio.play().catch(e => console.log('Audio playback info:', e));
-    } catch (e) {
-      console.log('Audio error:', e);
-    }
+    } catch (e) {}
   }, 0);
 }
 
@@ -151,25 +135,17 @@ function showMedia(item) {
 
   modal.style.display = 'flex';
 
-  const activeMedia = (item.type === 'video' || item.src.endsWith('.mp4')) ? video : img;
-  
-  img.classList.add('fade-hidden');
-  video.classList.add('fade-hidden');
-
-  setTimeout(() => {
-    if (item.type === 'video' || item.src.endsWith('.mp4')) {
-      img.style.display = 'none';
-      video.style.display = 'block';
-      video.src = item.src;
-      video.play();
-    } else {
-      video.style.display = 'none';
-      video.pause();
-      img.style.display = 'block';
-      img.src = item.src;
-    }
-    activeMedia.classList.remove('fade-hidden');
-  }, 100);
+  if (item.type === 'video' || item.src.endsWith('.mp4')) {
+    img.style.display = 'none';
+    video.style.display = 'block';
+    video.src = item.src;
+    video.play();
+  } else {
+    video.style.display = 'none';
+    video.pause();
+    img.style.display = 'block';
+    img.src = item.src;
+  }
 }
 
 function closeModal() {
@@ -192,9 +168,6 @@ function playNextSlide() {
 
   const item = playlist[currentIndex];
   showMedia(item);
-
-  const nextItem = playlist[(currentIndex + 1) % playlist.length];
-  if (nextItem) preloadImage(nextItem.src);
 
   const video = document.getElementById('modal-video');
   
