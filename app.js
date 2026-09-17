@@ -57,9 +57,8 @@ async function loadAlbum() {
         card.className = 'card';
         
         if (item.type === 'video' || item.src.endsWith('.mp4')) {
-          // Native Video Preview Element (Muted & Preloaded to 1s)
           const vidEl = document.createElement('video');
-          vidEl.src = `${item.src}#t=0.5`; // Seek to 0.5s for thumbnail frame
+          vidEl.src = `${item.src}#t=0.5`;
           vidEl.className = 'card-img';
           vidEl.muted = true;
           vidEl.playsInline = true;
@@ -123,18 +122,26 @@ function startHeroSlideshow() {
   }, 5000);
 }
 
-function playIntroSound() {
-  const audio = new Audio('audio/intro.mp3');
-  audio.play().catch(e => console.log('Audio playback info:', e));
-}
-
+// Non-blocking, instant intro transition
 function playIntro() {
-  playIntroSound();
   const intro = document.getElementById('intro-screen');
-  intro.classList.add('fade-out');
+  
+  // 1. Hide screen instantly without waiting for audio thread
+  intro.style.opacity = '0';
+  intro.style.pointerEvents = 'none';
   setTimeout(() => {
     intro.style.display = 'none';
   }, 200);
+
+  // 2. Play intro audio asynchronously in background
+  setTimeout(() => {
+    try {
+      const audio = new Audio('audio/intro.mp3');
+      audio.play().catch(e => console.log('Audio playback info:', e));
+    } catch (e) {
+      console.log('Audio error:', e);
+    }
+  }, 0);
 }
 
 function showMedia(item) {
@@ -162,7 +169,7 @@ function showMedia(item) {
       img.src = item.src;
     }
     activeMedia.classList.remove('fade-hidden');
-  }, 150);
+  }, 100);
 }
 
 function closeModal() {
