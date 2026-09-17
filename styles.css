@@ -6,6 +6,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Instant Intro Screen */
 .intro-container {
   position: fixed;
   top: 0; left: 0;
@@ -17,14 +18,14 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: opacity 0.8s ease, visibility 0.8s ease;
+  transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .logo-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: zoomIntro 2.5s ease-in-out forwards;
+  animation: zoomIntro 1.5s ease-in-out forwards;
 }
 
 .custom-logo {
@@ -55,8 +56,7 @@ body {
 }
 
 @keyframes zoomIntro {
-  0% { transform: scale(0.6); opacity: 0; }
-  50% { transform: scale(1.1); opacity: 1; }
+  0% { transform: scale(0.7); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
@@ -65,16 +65,20 @@ body {
   visibility: hidden;
 }
 
+/* Header Navbar - Fades on Scroll */
 .navbar {
   padding: 20px;
   font-size: 20px;
   font-weight: bold;
   color: #e50914;
-  position: fixed;
+  position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   z-index: 10;
   background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+  transition: opacity 0.3s ease;
+  box-sizing: border-box;
 }
 
 .hero {
@@ -129,9 +133,9 @@ body {
 .category-row { padding: 15px 20px; }
 .row-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
 
-/* Custom Message Banner Card */
+/* Message Banner Card */
 .message-card {
-  margin: 25px 20px;
+  margin: 30px 20px 15px 20px;
   padding: 20px;
   background: linear-gradient(135deg, #1f1f1f 0%, #111111 100%);
   border-left: 4px solid #e50914;
@@ -192,7 +196,7 @@ body {
   backdrop-filter: blur(2px);
 }
 
-/* Modal and Smooth Cross-Fade Transition */
+/* Modal and Smooth Cross-Fade */
 .modal {
   display: none;
   position: fixed;
@@ -211,7 +215,7 @@ body {
 }
 
 .fade-element {
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .fade-hidden {

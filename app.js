@@ -3,6 +3,18 @@ let currentIndex = 0;
 let slideshowTimer = null;
 let heroIndex = 0;
 
+// Navbar Scroll Disappear Listener
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('top-navbar');
+  if (window.scrollY > 80) {
+    navbar.style.opacity = '0';
+    navbar.style.pointerEvents = 'none';
+  } else {
+    navbar.style.opacity = '1';
+    navbar.style.pointerEvents = 'auto';
+  }
+});
+
 async function loadAlbum() {
   try {
     const cacheBuster = new Date().getTime();
@@ -13,7 +25,7 @@ async function loadAlbum() {
     playlist = [];
 
     data.forEach((section, idx) => {
-      // Inject Special Message Card between Miramar Beach and Bus Stand
+      // Message Card Injection
       if (idx === 1) {
         const msgCard = document.createElement('div');
         msgCard.className = 'message-card';
@@ -44,17 +56,27 @@ async function loadAlbum() {
         const card = document.createElement('div');
         card.className = 'card';
         
-        const imgEl = document.createElement('img');
-        imgEl.src = item.poster || item.src;
-        imgEl.loading = 'lazy';
-        imgEl.className = 'card-img';
-        card.appendChild(imgEl);
-
         if (item.type === 'video') {
+          // If video preview poster image fails to load, fallback to dark video card
+          const imgEl = document.createElement('img');
+          imgEl.src = item.poster || item.src;
+          imgEl.loading = 'lazy';
+          imgEl.className = 'card-img';
+          imgEl.onerror = () => {
+            imgEl.style.display = 'none';
+          };
+          card.appendChild(imgEl);
+
           const badge = document.createElement('div');
           badge.className = 'video-badge';
           badge.innerText = '▶ VIDEO';
           card.appendChild(badge);
+        } else {
+          const imgEl = document.createElement('img');
+          imgEl.src = item.src;
+          imgEl.loading = 'lazy';
+          imgEl.className = 'card-img';
+          card.appendChild(imgEl);
         }
 
         card.onclick = () => showMedia(item);
@@ -107,13 +129,14 @@ function playIntroSound() {
   audio.play().catch(e => console.log('Audio playback info:', e));
 }
 
+// Instant Intro Screen Dismissal
 function playIntro() {
   playIntroSound();
   const intro = document.getElementById('intro-screen');
   intro.classList.add('fade-out');
   setTimeout(() => {
     intro.style.display = 'none';
-  }, 800);
+  }, 200);
 }
 
 function showMedia(item) {
@@ -123,7 +146,6 @@ function showMedia(item) {
 
   modal.style.display = 'flex';
 
-  // Apply smooth fade-in effect on media load
   const activeMedia = (item.type === 'video' || item.src.endsWith('.mp4')) ? video : img;
   
   img.classList.add('fade-hidden');
@@ -142,7 +164,7 @@ function showMedia(item) {
       img.src = item.src;
     }
     activeMedia.classList.remove('fade-hidden');
-  }, 250);
+  }, 150);
 }
 
 function closeModal() {
