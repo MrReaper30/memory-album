@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shanuli and Paplet's Album</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
   <header class="navbar">Shanuli and Paplet's Album</header>
@@ -18,6 +18,12 @@
 
   <main id="catalog"></main>
 
-  <script src="app.js"></script>
+  <!-- Fullscreen Modal for Viewer/Slideshow -->
+  <div id="modal" class="modal" onclick="closeModal()">
+    <span class="close-btn">&times;</span>
+    <img id="modal-img" class="modal-content" src="">
+  </div>
+
+  <script src="app.js?v=2"></script>
 </body>
 </html>
