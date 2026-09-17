@@ -24,6 +24,7 @@ async function loadAlbum() {
     playlist = [];
 
     data.forEach((section, idx) => {
+      // Inject Special Message Card between Miramar Beach and Bus Stand Moments
       if (idx === 1) {
         const msgCard = document.createElement('div');
         msgCard.className = 'message-card';
@@ -54,13 +55,15 @@ async function loadAlbum() {
         const card = document.createElement('div');
         card.className = 'card';
         
-        if (item.type === 'video' || item.src.endsWith('.mp4')) {
+        if (item.type === 'video' || item.src.endsWith('.mp4') || item.src.endsWith('.webm')) {
+          // Encodes spaces in video paths so #t=0.5 thumbnail seeking works reliably across all browsers
+          const encodedSrc = encodeURI(item.src);
           const vidEl = document.createElement('video');
-          vidEl.src = `${item.src}#t=0.5`;
+          vidEl.src = `${encodedSrc}#t=0.5`;
           vidEl.className = 'card-img';
           vidEl.muted = true;
           vidEl.playsInline = true;
-          vidEl.preload = 'none'; // Prevents background data hogging
+          vidEl.preload = 'metadata';
           card.appendChild(vidEl);
 
           const badge = document.createElement('div');
@@ -98,7 +101,7 @@ function startHeroSlideshow() {
   const heroBg = document.getElementById('hero-bg');
   
   function updateBg() {
-    heroBg.style.backgroundImage = `url('${imagesOnly[heroIndex].src}')`;
+    heroBg.style.backgroundImage = `url('${encodeURI(imagesOnly[heroIndex].src)}')`;
     heroBg.style.animation = 'none';
     heroBg.offsetHeight;
     heroBg.style.animation = 'heroZoom 6s ease-in-out infinite alternate';
@@ -135,7 +138,7 @@ function showMedia(item) {
 
   modal.style.display = 'flex';
 
-  if (item.type === 'video' || item.src.endsWith('.mp4')) {
+  if (item.type === 'video' || item.src.endsWith('.mp4') || item.src.endsWith('.webm')) {
     img.style.display = 'none';
     video.style.display = 'block';
     video.src = item.src;
@@ -171,7 +174,7 @@ function playNextSlide() {
 
   const video = document.getElementById('modal-video');
   
-  if (item.type === 'video' || item.src.endsWith('.mp4')) {
+  if (item.type === 'video' || item.src.endsWith('.mp4') || item.src.endsWith('.webm')) {
     video.onended = () => advanceSlide();
   } else {
     slideshowTimer = setTimeout(() => advanceSlide(), 3500);
