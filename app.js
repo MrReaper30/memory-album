@@ -5,7 +5,9 @@ let heroIndex = 0;
 
 async function loadAlbum() {
   try {
-    const res = await fetch('images/photos.json?v=7');
+    // Append timestamp to prevent Chrome from loading cached photos.json
+    const cacheBuster = new Date().getTime();
+    const res = await fetch(`images/photos.json?cb=${cacheBuster}`);
     const data = await res.json();
     const catalog = document.getElementById('catalog');
     catalog.innerHTML = '';
@@ -38,7 +40,6 @@ async function loadAlbum() {
           card.style.justifyContent = 'center';
           card.style.fontWeight = 'bold';
         } else {
-          // Fast img element with native lazy loading instead of CSS background
           const imgEl = document.createElement('img');
           imgEl.src = item.src;
           imgEl.loading = 'lazy';
@@ -62,7 +63,6 @@ async function loadAlbum() {
   }
 }
 
-// Preload next image in background for zero lag during slideshow
 function preloadImage(url) {
   if (!url || url.endsWith('.mp4')) return;
   const img = new Image();
@@ -81,7 +81,6 @@ function startHeroSlideshow() {
     heroBg.offsetHeight;
     heroBg.style.animation = 'heroZoom 6s ease-in-out infinite alternate';
     
-    // Preload next background
     const nextIdx = (heroIndex + 1) % imagesOnly.length;
     preloadImage(imagesOnly[nextIdx].src);
   }
@@ -149,7 +148,6 @@ function playNextSlide() {
   const item = playlist[currentIndex];
   showMedia(item);
 
-  // Preload upcoming slide
   const nextItem = playlist[(currentIndex + 1) % playlist.length];
   if (nextItem) preloadImage(nextItem.src);
 
